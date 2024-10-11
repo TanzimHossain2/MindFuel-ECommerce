@@ -19,13 +19,13 @@ jobs:
       - name: Set up Node.js 🚀
         uses: actions/setup-node@v2
         with:
-          node-version: "22" # Specify the Node.js version you're using
+          node-version-file: ".nvmrc"
 
       - name: Install dependencies 📦
-        run: npm install
+        run: yarn install # Change npm to yarn
 
       - name: Run ESLint 🏃‍♂️
-        run: npm run lint && npm run lint:fix
+        run: yarn lint && yarn lint:fix # Change npm to yarn
 
-      - name: Run Prettier 🏃‍♂
-        run: npm run check
+      - name: Run Prettier 🏃‍♂️
+        run: yarn check # Change npm to yarn

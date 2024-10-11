@@ -1,13 +1,17 @@
-import styles from "./page.module.css";
+import Header from "@/components/common/header/Header";
+import TopBar from "@/components/common/header/TopBar";
+import Hero from "@/components/home/Hero";
+import Marquee from "@/components/home/Marquee";
 
 export default function Home() {
+  console.log("Home");
+
   return (
-    <div className={styles.page}>
-      <h1>Welcome to the app!</h1>
-      <p>
-        This is a simple app to demonstrate how to use ESLint and Prettier with
-        TypeScript.
-      </p>
-    </div>
+    <>
+      <TopBar />
+      <Header />
+      <Hero />
+      <Marquee />
+    </>
   );
 }

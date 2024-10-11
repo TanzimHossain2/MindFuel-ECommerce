@@ -3,14 +3,14 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
+    "dev": "next dev -p 8000 -H 0.0.0.0",
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
     "lint:fix": "next lint --fix",
     "prepare": "husky",
-    "check": "prettier --check \"**/*.{ts,tsx,mdx}\" --cache",
-    "format": "prettier --write \"**/*.{ts,tsx,mdx}\" --cache"
+    "check": "prettier --check \"**/*.{ts,tsx,mdx}\" ",
+    "format": "prettier --write \"**/*.{ts,tsx,mdx}\""
   },
   "author": {
     "name": "Tanzim Hossain",
@@ -21,6 +21,7 @@
   "dependencies": {
     "@emailjs/browser": "^4.4.1",
     "@google/model-viewer": "^3.5.0",
+    "@popperjs/core": "^2.11.8",
     "bootstrap": "^5.3.3",
     "drift-zoom": "^1.5.1",
     "next": "14.2.15",
@@ -40,6 +41,7 @@
     "@commitlint/cli": "^19.5.0",
     "@commitlint/config-conventional": "^19.5.0",
     "@commitlint/types": "^19.5.0",
+    "@types/bootstrap": "^5.2.10",
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",

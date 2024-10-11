@@ -9,6 +9,8 @@
 #mocks data
 /src/data/*
 
+public/images/*
+
 # ENV
 .env
 .env.local
