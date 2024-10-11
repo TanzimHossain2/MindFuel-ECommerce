@@ -1,0 +1,31 @@
+name: Lint 🧹
+
+on:
+  push:
+    branches:
+      - main # or the default branch of your repository
+  pull_request:
+    branches:
+      - main # or the default branch of your repository
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code 🛎️
+        uses: actions/checkout@v2
+
+      - name: Set up Node.js 🚀
+        uses: actions/setup-node@v2
+        with:
+          node-version: "22" # Specify the Node.js version you're using
+
+      - name: Install dependencies 📦
+        run: npm install
+
+      - name: Run ESLint 🏃‍♂️
+        run: npm run lint && npm run lint:fix
+
+      - name: Run Prettier 🏃‍♂
+        run: npm run check
