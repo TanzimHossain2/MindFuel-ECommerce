@@ -2,8 +2,8 @@ import React from "react";
 import Nav from "./Nav";
 import Image from "next/image";
 import Link from "next/link";
-// import CartLength from "../common/CartLength";
-// import WishlistLength from "../common/WishlistLength";
+import CartLength from "../CartLength";
+import WishlistLength from "../WishlistLength";
 export default function Header() {
   console.log("Header1");
 
@@ -75,7 +75,9 @@ export default function Header() {
               <li className="nav-wishlist">
                 <Link href={`/wishlist`} className="nav-icon-item">
                   <i className="icon icon-heart" />
-                  <span className="count-box">{/* <WishlistLength /> */}</span>
+                  <span className="count-box">
+                    <WishlistLength />
+                  </span>
                 </Link>
               </li>
               <li className="nav-cart">
@@ -85,7 +87,9 @@ export default function Header() {
                   className="nav-icon-item"
                 >
                   <i className="icon icon-bag" />
-                  <span className="count-box">{/* <CartLength /> */}</span>
+                  <span className="count-box">
+                    <CartLength />
+                  </span>
                 </a>
               </li>
             </ul>

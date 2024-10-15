@@ -1,12 +1,13 @@
 "use client";
 
 import { useContextElement } from "@/context/Context";
+import { sizeOptions } from "@/data/singleProductOptions";
+import { generateUrl } from "@/utils/generateUrl";
 import Image from "next/image";
 import Link from "next/link";
+import React, { useState } from "react";
 import { Navigation } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
-import { colors, sizeOptions } from "@/data/singleProductOptions";
-import React, { useState } from "react";
 
 export default function QuickView() {
   const {
@@ -19,11 +20,10 @@ export default function QuickView() {
     isAddedtoCompareItem,
   } = useContextElement();
 
-  const [currentColor, setCurrentColor] = useState(colors[0]);
   const [currentSize, setCurrentSize] = useState(sizeOptions[0]);
 
   const openModalSizeChoice = async () => {
-    const bootstrap = (await import("bootstrap")).default; // Dynamic import of bootstrap
+    const bootstrap = (await import("bootstrap")).default;
     const modalElement = document.getElementById("find_size");
     if (modalElement) {
       const myModal = new bootstrap.Modal(modalElement, {
@@ -44,7 +44,7 @@ export default function QuickView() {
     }
   };
 
-  if (!quickViewItem) return null; // Ensure quickViewItem exists
+  if (!quickViewItem) return null;
 
   return (
     <div className="modal fade modalDemo" id="quick_view">
@@ -93,7 +93,7 @@ export default function QuickView() {
                   <h5>
                     <Link
                       className="link"
-                      href={`/product-detail/${quickViewItem.id}`}
+                      href={`/product-detail/${generateUrl(quickViewItem.title, quickViewItem.id)}`}
                     >
                       {quickViewItem.title}
                     </Link>
@@ -103,54 +103,21 @@ export default function QuickView() {
                   <div className="badges text-uppercase">Best seller</div>
                   <div className="product-status-content">
                     <i className="icon-lightning" />
-                    <p className="fw-6">
-                      Selling fast! 48 people have this in their carts.
-                    </p>
+                    <p className="fw-6">Selling fast!</p>
                   </div>
                 </div>
                 <div className="tf-product-info-price">
                   <div className="price">${quickViewItem.price.toFixed(2)}</div>
                 </div>
                 <div className="tf-product-description">
-                  <p>
-                    Nunc arcu faucibus a et lorem eu a mauris adipiscing conubia
-                    ac aptent ligula facilisis a auctor habitant parturient a
-                    a.Interdum fermentum.
-                  </p>
+                  <div
+                    dangerouslySetInnerHTML={{
+                      __html: `<p>${quickViewItem.description}</p>`,
+                    }}
+                  ></div>
                 </div>
-                <div className="tf-product-info-variant-picker">
-                  <div className="variant-picker-item">
-                    <div className="variant-picker-label">
-                      Color:{" "}
-                      <span className="fw-6 variant-picker-label-value">
-                        {currentColor.value}
-                      </span>
-                    </div>
-                    <form className="variant-picker-values">
-                      {colors.map((color) => (
-                        <React.Fragment key={color.id}>
-                          <input
-                            id={color.id}
-                            type="radio"
-                            name="color1"
-                            readOnly
-                            checked={currentColor === color}
-                          />
-                          <label
-                            onClick={() => setCurrentColor(color)}
-                            className="hover-tooltip radius-60"
-                            htmlFor={color.id}
-                            data-value={color.value}
-                          >
-                            <span
-                              className={`btn-checkbox ${color.className}`}
-                            />
-                            <span className="tooltip">{color.value}</span>
-                          </label>
-                        </React.Fragment>
-                      ))}
-                    </form>
-                  </div>
+
+                {/* <div className="tf-product-info-variant-picker">
                   <div className="variant-picker-item">
                     <div className="d-flex justify-content-between align-items-center">
                       <div className="variant-picker-label">
@@ -188,7 +155,8 @@ export default function QuickView() {
                       ))}
                     </form>
                   </div>
-                </div>
+                </div> */}
+
                 <div className="tf-product-info-buy-button">
                   <form onSubmit={(e) => e.preventDefault()}>
                     <a
@@ -219,7 +187,8 @@ export default function QuickView() {
                       </span>
                       <span className="icon icon-delete" />
                     </a>
-                    <a
+
+                    {/* <a
                       href="#compare"
                       data-bs-toggle="offcanvas"
                       aria-controls="offcanvasLeft"
@@ -235,7 +204,8 @@ export default function QuickView() {
                           : "Add to Compare"}
                       </span>
                       <span className="icon icon-check" />
-                    </a>
+                    </a> */}
+
                     <div className="w-100">
                       <a href="#" className="btns-full">
                         Buy with
@@ -252,9 +222,10 @@ export default function QuickView() {
                     </div>
                   </form>
                 </div>
+
                 <div>
                   <Link
-                    href={`/product-detail/${quickViewItem.id}`}
+                    href={`/product-detail/${generateUrl(quickViewItem.title, quickViewItem.id)}`}
                     className="tf-btn fw-6 btn-line"
                   >
                     View full details{" "}

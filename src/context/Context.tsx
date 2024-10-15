@@ -1,20 +1,16 @@
 "use client";
 
 import { allProducts } from "@/data/products";
-import { openCartModal } from "@/utils/openCartModal";
-import React, { useEffect, useContext, useState, ReactNode } from "react";
+import dynamic from "next/dynamic";
+import React, { ReactNode, useContext, useEffect, useState } from "react";
+import { IProduct } from "../types/product/shopify";
 
-// Types for products, wishlist, cart, etc.
-interface Product {
-  id: number;
-  title: string;
-  price: number;
-  imgSrc: string;
-  imgHoverSrc?: string;
-  // Add other properties as necessary
-}
+const OpenCartModal = dynamic<{}>(
+  () => import("@/utils/openCartModal").then((mod) => mod.OpenCartModal),
+  { ssr: false }
+);
 
-interface CartItem extends Product {
+interface CartItem extends IProduct {
   quantity: number;
 }
 
@@ -27,16 +23,20 @@ interface ContextType {
   removeFromWishlist: (id: number) => void;
   addToWishlist: (id: number) => void;
   isAddedtoWishlist: (id: number) => boolean;
-  quickViewItem: Product | null;
+  quickViewItem: IProduct | null;
   wishList: number[];
-  setQuickViewItem: React.Dispatch<React.SetStateAction<Product | null>>;
-  quickAddItem: number;
-  setQuickAddItem: React.Dispatch<React.SetStateAction<number>>;
+  setQuickViewItem: React.Dispatch<React.SetStateAction<IProduct | null>>;
+  quickAddItem: number | null;
+  setQuickAddItem: React.Dispatch<React.SetStateAction<number | null>>;
   addToCompareItem: (id: number) => void;
   isAddedtoCompareItem: (id: number) => boolean;
   removeFromCompareItem: (id: number) => void;
   compareItem: number[];
   setCompareItem: React.Dispatch<React.SetStateAction<number[]>>;
+  quantityCount: number;
+  setQuantityCount: React.Dispatch<React.SetStateAction<number>>;
+  getProductQuantity: (productId: number | string) => number;
+  setProductQuantity: (productId: number | string, newQuantity: number) => void;
 }
 
 const dataContext = React.createContext<ContextType | undefined>(undefined);
@@ -57,13 +57,13 @@ export default function Context({ children }: ContextProps) {
   const [cartProducts, setCartProducts] = useState<CartItem[]>([]);
   const [wishList, setWishList] = useState<number[]>([]);
   const [compareItem, setCompareItem] = useState<number[]>([]);
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  //@ts-expect-error
-  const [quickViewItem, setQuickViewItem] = useState<Product | null>(
-    allProducts[0]
-  );
-  const [quickAddItem, setQuickAddItem] = useState<number>(1);
+  const [quickViewItem, setQuickViewItem] = useState<IProduct | null>(null);
+  const [quickAddItem, setQuickAddItem] = useState<number | null>(null);
   const [totalPrice, setTotalPrice] = useState<number>(0);
+  const [quantityCount, setQuantityCount] = useState<number>(1);
+  const [productQuantities, setProductQuantities] = useState<{
+    [id: number]: number;
+  }>({});
 
   // Calculate total price
   useEffect(() => {
@@ -81,7 +81,11 @@ export default function Context({ children }: ContextProps) {
         // @ts-expect-error
         const item: CartItem = { ...productToAdd, quantity: qty };
         setCartProducts((prev) => [...prev, item]);
-        openCartModal();
+
+        if (typeof window === "undefined" || typeof document === "undefined") {
+          return;
+        }
+        <OpenCartModal />;
       }
     }
   };
@@ -118,7 +122,22 @@ export default function Context({ children }: ContextProps) {
     return compareItem.includes(id);
   };
 
-  // Local Storage handling
+  // Get the quantity of a specific product by its ID
+  const getProductQuantity = (productId: number | string) => {
+    return productQuantities[productId as keyof typeof productQuantities] || 1;
+  };
+
+  // Set the quantity of a specific product
+  const setProductQuantity = (
+    productId: number | string,
+    newQuantity: number
+  ) => {
+    setProductQuantities((prevQuantities) => ({
+      ...prevQuantities,
+      [productId]: newQuantity,
+    }));
+  };
+
   useEffect(() => {
     const storedCart = JSON.parse(
       localStorage.getItem("cartList") || "[]"
@@ -164,6 +183,10 @@ export default function Context({ children }: ContextProps) {
     removeFromCompareItem,
     compareItem,
     setCompareItem,
+    quantityCount,
+    setQuantityCount,
+    getProductQuantity,
+    setProductQuantity,
   };
 
   return (

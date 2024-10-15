@@ -77,7 +77,7 @@ const Nav = ({ isArrow = true, textColor = "", Linkfs = "" }: NavProps) => {
       </li>
       <li className="menu-item">
         <Link
-          href="#"
+          href="/shop"
           className={`item-link ${Linkfs} ${textColor} ${
             IsMenuActive(productsPages) ? "activeMenu" : ""
           }`}

@@ -10,13 +10,6 @@ const ClientHeader = () => {
     current: (typeof window !== "undefined" ? window.scrollY : 0) as number,
   };
 
-  // Load Bootstrap CSS on the client-side
-  useEffect(() => {
-    if (typeof window !== "undefined") {
-      import("bootstrap/dist/css/bootstrap.min.css");
-    }
-  }, []);
-
   // Load Bootstrap JS on the client-side
   useEffect(() => {
     if (typeof window !== "undefined") {
